@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 为这个mapper指定一个唯一的namespace，namespace的值习惯上设置成包名+sql映射文件名，这样就能够保证namespace的值是唯一的 -->
+<mapper namespace="user.mapping">
+    <!--登录-->
+    <select id="login" parameterType="top.wangjingxin.model.User" resultType="top.wangjingxin.model.User">
+        SELECT * FROM user WHERE user_id=#{user_id} AND user_password = #{user_password}
+    </select>
+    <!--设置个人的任务-->
+    <insert id="setTask" parameterType="top.wangjingxin.model.Task">
+        INSERT INTO task VALUES(#{user_id},#{task},#{task_id})
+    </insert>
+    <!--把未设置改成已设置-->
+    <update id="updateSet" parameterType="string">
+        UPDATE user SET if_set=1 WHERE user_id = #{string}
+    </update>
+    <!--获取个人任务-->
+    <select id="getTask" parameterType="string" resultType="top.wangjingxin.model.Task">
+        SELECT * FROM task WHERE user_id = #{string}
+    </select>
+    <!--获取该任务是否被完成-->
+    <select id="getTaskFinish" parameterType="top.wangjingxin.model.GetTask" resultType="top.wangjingxin.model.Richang">
+        SELECT * FROM richang WHERE user_id = #{user_id} AND task_id = #{task_id} AND date = #{date}
+    </select>
+    <!--上传成功-->
+    <insert id="upload" parameterType="top.wangjingxin.model.Richang">
+        INSERT INTO richang VALUES (#{user_id},#{task_id},#{date},#{concreate_time},#{img})
+    </insert>
+    <!--更新密码-->
+    <update id="change" parameterType="top.wangjingxin.model.Change">
+        UPDATE user SET user_password=#{now} WHERE user_id = #{user_id} AND user_password = #{old}
+    </update>
+</mapper>
